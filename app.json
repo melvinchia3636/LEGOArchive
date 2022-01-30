@@ -3,12 +3,13 @@
     "name": "LEGOArchive",
     "slug": "LEGOArchive",
     "version": "1.0.0",
+    "entryPoint": "./src/App.tsx",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#EF4444"
     },
     "updates": {
       "fallbackToCacheTimeout": 0
