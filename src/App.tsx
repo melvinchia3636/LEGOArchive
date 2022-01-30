@@ -9,14 +9,21 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator, TransitionPresets } from '@react-navigation/stack';
 import * as SplashScreen from 'expo-splash-screen';
 import {
-  useFonts, Poppins_700Bold, Poppins_600SemiBold, Poppins_500Medium,
+  useFonts, Poppins_700Bold, Poppins_600SemiBold, Poppins_500Medium, Poppins_400Regular,
 } from '@expo-google-fonts/poppins';
 import { View } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import Welcome from './Welcome';
 import Main from './Main';
+import SetDetails from './SetDetails';
 
-const Stack = createStackNavigator();
+export type RootStackParamList = {
+  Main: undefined;
+  Welcome: undefined;
+  SetDetails: { setID: string }
+};
+
+const RootStack = createStackNavigator<RootStackParamList>();
 
 function App() {
   const [appIsReady, setAppIsReady] = useState<boolean>(false);
@@ -25,6 +32,7 @@ function App() {
     Poppins_700Bold,
     Poppins_600SemiBold,
     Poppins_500Medium,
+    Poppins_400Regular
   });
 
   useEffect(() => {
@@ -61,16 +69,18 @@ function App() {
         }}
       >
         <NavigationContainer>
-          <Stack.Navigator
-            initialRouteName="welcome"
+          <RootStack.Navigator
+            initialRouteName="Welcome"
             screenOptions={{
               headerShown: false,
+              gestureEnabled: false,
               ...TransitionPresets.SlideFromRightIOS,
             }}
           >
-            <Stack.Screen name="welcome" component={Welcome} />
-            <Stack.Screen name="app" component={Main} />
-          </Stack.Navigator>
+            <RootStack.Screen name="Welcome" component={Welcome} />
+            <RootStack.Screen name="Main" component={Main} />
+            <RootStack.Screen name="SetDetails" component={SetDetails} />
+          </RootStack.Navigator>
         </NavigationContainer>
       </View>
     </SafeAreaProvider>

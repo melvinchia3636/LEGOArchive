@@ -9,10 +9,11 @@ import axios from 'axios';
 import { ScrollView } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Feather } from '@expo/vector-icons';
+import { StackScreenProps } from '@react-navigation/stack';
 import { SetData } from './types/setData';
 import { Theme } from './types/themesData';
 
-function Home() {
+function Home({ navigation }: StackScreenProps<{}>) {
   const sections = [
     {
       name: 'Latest Sets',
@@ -273,7 +274,8 @@ function Home() {
                 {sets.map(({
                   setID, number, name, image: { thumbnailURL },
                 }) => (
-                  <View
+                  <Pressable
+                    onPress={() => navigation.navigate('SetDetails' as never, { setID } as never)}
                     key={setID}
                     style={{
                       marginHorizontal: 6,
@@ -314,7 +316,7 @@ function Home() {
                     >
                       {name}
                     </Text>
-                  </View>
+                  </Pressable>
                 ))}
               </ScrollView>
             </View>

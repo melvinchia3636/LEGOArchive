@@ -1,7 +1,7 @@
 /* eslint-disable no-nested-ternary */
 import React from 'react';
 import { BottomTabBarProps } from '@react-navigation/bottom-tabs';
-import { View, Text, TouchableOpacity } from 'react-native';
+import { View, TouchableOpacity } from 'react-native';
 import {
   HomeSimple, Search, Settings, User, ViewGrid,
 } from 'iconoir-react-native';
@@ -36,7 +36,7 @@ function TabBar({ state, navigation }: BottomTabBarProps) {
         >
           {index === 2 ? (
             <TouchableOpacity
-              onPress={() => navigation.navigate({ name, merge: true })}
+              onPress={() => navigation.navigate({ name, params: {}, merge: true })}
               style={{
                 backgroundColor: '#EF4444',
                 padding: 16,
@@ -50,7 +50,7 @@ function TabBar({ state, navigation }: BottomTabBarProps) {
             </TouchableOpacity>
           ) : (
             <TouchableOpacity
-              onPress={() => navigation.navigate({ name, merge: true })}
+              onPress={() => navigation.navigate({ name, params: {}, merge: true })}
               style={{
                 marginRight: index === 1 ? 16 : 0,
                 marginLeft: index === 3 ? 14 : 0,

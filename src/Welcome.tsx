@@ -79,7 +79,10 @@ function Welcome({ navigation }: StackScreenProps<{}>) {
               alignItems: 'center',
               justifyContent: 'center',
             }}
-            onPress={() => navigation.push('app')}
+            onPress={() => navigation.reset({
+              index: 0,
+              routes: [{ name: 'Main' as never }],
+            })}
           >
             <Text
               allowFontScaling={false}
