@@ -7,10 +7,71 @@ import {
 import React, { useEffect, useState } from 'react';
 import { StackScreenProps } from '@react-navigation/stack';
 import axios from 'axios';
-import { Feather } from '@expo/vector-icons';
+import { Feather, MaterialCommunityIcons } from '@expo/vector-icons';
 import RenderHTML from 'react-native-render-html';
+import CountryFlag from 'react-native-country-flag';
+import Moment from 'moment';
 import { RootStackParamList } from '../App';
-import { SetDetailsData } from './types/setDetailsType';
+import { CA, SetDetailsData } from './types/setDetailsType';
+
+interface ISpecItem {
+  icon: string;
+  name: string;
+  value: string;
+}
+
+function SpecItem({ icon, name, value }: ISpecItem) {
+  return (
+    <View style={{
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      paddingVertical: 12,
+      paddingTop: 16,
+      borderBottomWidth: 1.6,
+      borderColor: '#F1F5F9',
+    }}
+    >
+      <View style={{
+        flexDirection: 'row',
+        alignItems: 'center',
+      }}
+      >
+        <MaterialCommunityIcons
+          name={icon}
+          size={24}
+          color="#A1A1AA"
+        />
+        <Text
+          allowFontScaling={false}
+          style={{
+            fontSize: 18,
+            fontFamily: 'Poppins_500Medium',
+            color: '#A1A1AA',
+            marginBottom: -4,
+            marginLeft: 6,
+          }}
+        >
+          {name}
+        </Text>
+      </View>
+      <Text
+        allowFontScaling={false}
+        style={{
+          fontSize: 20,
+          fontFamily: 'Poppins_500Medium',
+          color: '#3F3F46',
+          flex: 1,
+          flexWrap: 'wrap',
+          alignItems: 'flex-end',
+          justifyContent: 'flex-end',
+          textAlign: 'right',
+        }}
+      >
+        {value}
+      </Text>
+    </View>
+  );
+}
 
 function SetDetails({ navigation, route }: StackScreenProps<RootStackParamList, 'SetDetails'>) {
   const [data, setData] = useState<SetDetailsData | undefined>();
@@ -32,10 +93,14 @@ function SetDetails({ navigation, route }: StackScreenProps<RootStackParamList, 
     <>
       {data
       && (
-      <ScrollView style={{
-        flex: 1,
-        backgroundColor: 'white',
-      }}
+      <ScrollView
+        style={{
+          flex: 1,
+          backgroundColor: 'white',
+        }}
+        contentContainerStyle={{
+          paddingBottom: 30,
+        }}
       >
         <View style={{
           padding: 16,
@@ -109,50 +174,116 @@ function SetDetails({ navigation, route }: StackScreenProps<RootStackParamList, 
           <Text
             allowFontScaling={false}
             style={{
-              fontFamily: 'Poppins_600SemiBold',
+              fontFamily: 'Poppins_500Medium',
               fontSize: 26,
               color: '#3F3F46',
+              marginBottom: -6,
+              marginTop: 16,
             }}
           >
             Specifications
           </Text>
           {([
-            ['Release Year', 'year'],
-            ['Set Category', 'category'],
-            ['Released Year', 'year'],
-            ['Pieces', 'pieces'],
-            ['Packaging Type', 'packagingType'],
-            ['Availability', 'availability'],
-          ] as [string, string][]).map(([name, key]: [string, string]) => (
+            ['calendar-today', 'Release Year', 'year'],
+            ['view-agenda-outline', 'Theme', 'theme'],
+            ['view-grid-outline', 'Subtheme', 'subtheme'],
+            ['toy-brick-outline', 'Pieces', 'pieces'],
+            ['clipboard-account-outline', 'Minifigs', 'minifigs'],
+            ['cube-outline', 'Packaging Type', 'packagingType'],
+            ['check-circle-outline', 'Availability', 'availability'],
+          ] as [string, string, string][])
+            .filter(([,, key]) => data[key as never])
+            .map(([icon, name, key]: [string, string, string]) => (
+              <SpecItem key={name} icon={icon} name={name} value={data[key as never]} />
+            ))}
+          {data.ageRange.min && <SpecItem icon="account-clock-outline" name="Age Range" value={`${data.ageRange?.min}+`} />}
+          {data.dimensions.width && <SpecItem icon="arrow-expand" name="Dimensions" value={`${data.dimensions.width} x ${data.dimensions.height}${data.dimensions.depth ? ` x ${data.dimensions.depth}` : ''} cm`} />}
+          {data.dimensions.weight && <SpecItem icon="scale-balance" name="Weight" value={`${data.dimensions.weight} kg`} />}
+          {data.LEGOCom && (
+          <>
+            <Text
+              allowFontScaling={false}
+              style={{
+                fontFamily: 'Poppins_500Medium',
+                fontSize: 26,
+                color: '#3F3F46',
+                marginBottom: -6,
+                marginTop: 56,
+              }}
+            >
+              Availability at LEGO.com
+            </Text>
             <View style={{
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              paddingVertical: 12,
+              marginTop: 10,
             }}
             >
-              <Text
-                allowFontScaling={false}
-                style={{
-                  fontSize: 20,
-                  fontFamily: 'Poppins_500Medium',
-                  color: '#A1A1AA',
+              {Object.entries({
+                US: ['USA', '$'],
+                GB: ['UK', '£'],
+                CA: ['Canada', '$'],
+                DE: ['Germany', '€'],
+              }).filter(([key]) => (data.LEGOCom[(key === 'GB' ? 'UK' : key) as never] as CA)?.retailPrice).map(([key, [name, currency]]) => (
+                <View style={{
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
                 }}
-              >
-                {name}
-              </Text>
-              <Text
-                allowFontScaling={false}
-                style={{
-                  fontSize: 20,
-                  fontFamily: 'Poppins_500Medium',
-                  color: '#3F3F46',
-                }}
-              >
-                {data[key as never]}
-
-              </Text>
+                >
+                  <View style={{
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    marginVertical: 12,
+                  }}
+                  >
+                    <CountryFlag
+                      isoCode={key.toLowerCase()}
+                      size={64}
+                      style={{
+                        borderRadius: 6,
+                        marginRight: 12,
+                      }}
+                    />
+                    <View>
+                      <Text
+                        allowFontScaling={false}
+                        style={{
+                          fontFamily: 'Poppins_600SemiBold',
+                          color: '#EF4444',
+                          fontSize: 22,
+                        }}
+                      >
+                        {name}
+                      </Text>
+                      <Text
+                        allowFontScaling={false}
+                        style={{
+                          fontFamily: 'Poppins_500Medium',
+                          fontSize: 18,
+                          marginTop: -8,
+                          color: '#3F3F46',
+                        }}
+                      >
+                        {Moment((data.LEGOCom[(key === 'GB' ? 'UK' : key) as never] as CA).dateFirstAvailable).format('DD MMM YYYY')}
+                      </Text>
+                    </View>
+                  </View>
+                  <Text
+                    allowFontScaling={false}
+                    style={{
+                      fontFamily: 'Poppins_600SemiBold',
+                      fontSize: 24,
+                      marginTop: -8,
+                      color: '#3F3F46',
+                    }}
+                  >
+                    {currency}
+                    {(data.LEGOCom[(key === 'GB' ? 'UK' : key) as never] as CA).retailPrice}
+                  </Text>
+                </View>
+              ))}
             </View>
-          ))}
+          </>
+          )}
         </View>
       </ScrollView>
       )}

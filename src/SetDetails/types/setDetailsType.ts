@@ -43,6 +43,7 @@ export interface CA {
 }
 
 export interface AgeRange {
+    min?: number
 }
 
 export interface Barcode {
@@ -58,6 +59,7 @@ export interface Dimensions {
     height: number;
     width: number;
     depth: number;
+    weight: number;
 }
 
 export interface ExtendedData {

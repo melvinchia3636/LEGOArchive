@@ -1,3 +1,4 @@
+/* eslint-disable no-shadow */
 /* eslint-disable react/jsx-props-no-spreading */
 /* eslint-disable react/no-unstable-nested-components */
 /* eslint-disable import/extensions */
@@ -14,6 +15,8 @@ import TabBar from './TabBar';
 const Tab = createBottomTabNavigator();
 
 function Main({ navigation }: StackScreenProps<{}>) {
+  const rootNavigation = navigation;
+
   return (
     <Tab.Navigator
       screenOptions={{
@@ -22,7 +25,13 @@ function Main({ navigation }: StackScreenProps<{}>) {
       tabBar={(props) => <TabBar {...props} />}
     >
       <Tab.Screen name="home">
-        {({ route }) => <Home navigation={navigation} route={route as never} />}
+        {({ navigation, route }) => (
+          <Home
+            homeNavigation={navigation as never}
+            navigation={rootNavigation}
+            route={route as never}
+          />
+        )}
       </Tab.Screen>
       <Tab.Screen name="themes" component={Themes} />
       <Tab.Screen name="search" component={Search} />

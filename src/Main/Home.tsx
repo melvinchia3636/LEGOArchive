@@ -2,52 +2,55 @@
 /* eslint-disable import/no-extraneous-dependencies */
 /* eslint-disable import/extensions */
 import {
-  View, Text, Image, StatusBar, TextInput, Pressable,
+  View, Text, Image, StatusBar, TextInput, Pressable, RefreshControl, FlatList,
 } from 'react-native';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import axios from 'axios';
 import { ScrollView } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Feather } from '@expo/vector-icons';
-import { StackScreenProps } from '@react-navigation/stack';
+import { StackNavigationProp, StackScreenProps } from '@react-navigation/stack';
 import { SetData } from './types/setData';
 import { Theme } from './types/themesData';
 
-function Home({ navigation }: StackScreenProps<{}>) {
-  const sections = [
+interface IHome extends StackScreenProps<{}>{
+  homeNavigation: StackNavigationProp<{}>
+}
+
+function Home({ homeNavigation, navigation }:IHome) {
+  const [sections, setSections] = useState([
     {
       name: 'Latest Sets',
-      params: '{year: 2020}',
+      params: '{year: 2020,pageSize:16}',
     },
-    {
-      name: 'Architecture Sets',
-      params: '{theme: "architecture",orderBy:"YearFromDESC"}',
-    },
-    {
-      name: 'LEGO Creator',
-      params: '{theme:"creator",orderBy:"YearFromDESC"}',
-    },
-    {
-      name: 'LEGO Minecraft',
-      params: '{theme:"minecraft",orderBy:"YearFromDESC"}',
-    },
-    {
-      name: 'LEGO Technic',
-      params: '{theme:"technic",orderBy:"YearFromDESC"}',
-    },
-  ];
-
-  const [themes, setThemes] = useState<Theme[]>([]);
+  ]);
+  const [randomThemes, setRandomThemes] = useState<Theme[]>([]);
   const [data, setData] = useState<SetData[]>([]);
+  const [refreshing, setRefreshing] = useState(false);
 
   const fetchThemes = async () => {
     const response = await axios({
       url: 'https://brickset.com/api/v3.asmx/getThemes?apiKey=3-xvT1-Lmgk-a1Lyw',
     });
-    setThemes(response.data.themes);
+    response.data.themes = (response.data.themes as Theme[])
+      .filter(({ setCount }) => setCount >= 20);
+
+    const rThemes = Array(5)
+      .fill(0)
+      .map(() => response.data.themes[Math.floor(Math.random() * response.data.themes.length)]);
+    setRandomThemes(rThemes);
+
+    setSections([{
+      name: 'Latest Sets',
+      params: '{year: 2020,pageSize:16}',
+    }].concat(rThemes.map(({ theme }) => ({
+      name: theme,
+      params: `{theme:"${theme.toLowerCase()}",pageSize:16,orderBy:"YearFromDESC"}`,
+    }))));
   };
 
   const fetchData = async () => {
+    setData([]);
     const tempData = [];
     for await (const { params } of sections) {
       const response = await axios({
@@ -57,11 +60,20 @@ function Home({ navigation }: StackScreenProps<{}>) {
       tempData.push(response.data);
     }
     setData(tempData);
+    setRefreshing(false);
   };
 
   useEffect(() => {
     fetchThemes();
+  }, []);
+
+  useEffect(() => {
     fetchData();
+  }, [sections]);
+
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+    fetchThemes();
   }, []);
 
   return (
@@ -71,9 +83,16 @@ function Home({ navigation }: StackScreenProps<{}>) {
     }}
     >
       <StatusBar backgroundColor="#EF4444" />
-      <ScrollView style={{
-        paddingVertical: 20,
-      }}
+      <ScrollView
+        style={{
+          paddingVertical: 20,
+        }}
+        refreshControl={(
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+          />
+        )}
       >
         <View style={{
           flexDirection: 'row',
@@ -128,6 +147,7 @@ function Home({ navigation }: StackScreenProps<{}>) {
           alignItems: 'center',
           marginHorizontal: 24,
           padding: 6,
+          paddingHorizontal: 8,
           backgroundColor: '#F1F5F9',
           borderRadius: 12,
           marginBottom: 20,
@@ -182,11 +202,14 @@ function Home({ navigation }: StackScreenProps<{}>) {
           >
             Themes
           </Text>
-          <Pressable>
-            <Text style={{
-              fontFamily: 'Poppins_600SemiBold',
-              color: '#EF4444',
-            }}
+          <Pressable onPress={() => homeNavigation.navigate('themes' as never)}>
+            <Text
+              allowFontScaling={false}
+              style={{
+                fontFamily: 'Poppins_600SemiBold',
+                color: '#EF4444',
+                fontSize: 18,
+              }}
             >
               See all
             </Text>
@@ -199,46 +222,45 @@ function Home({ navigation }: StackScreenProps<{}>) {
           flexWrap: 'wrap',
         }}
         >
-          {themes.length > 0 && Array(8)
-            .fill(0)
-            .map(() => themes[Math.floor(Math.random() * themes.length)])
-            .map(({ theme }) => (
-              <Pressable style={{
-                padding: 4,
-                paddingHorizontal: 12,
-                borderRadius: 100,
-                borderWidth: 1.6,
-                borderColor: '#F1F5F9',
-                margin: 3,
-                flexGrow: 1,
-                alignItems: 'center',
-              }}
+          {randomThemes.length > 0 && randomThemes.map(({ theme }) => (
+            <Pressable style={{
+              padding: 4,
+              paddingHorizontal: 12,
+              borderRadius: 100,
+              borderWidth: 1.6,
+              borderColor: '#F1F5F9',
+              margin: 3,
+              flexGrow: 1,
+              alignItems: 'center',
+            }}
+            >
+              <Text
+                numberOfLines={1}
+                allowFontScaling={false}
+                style={{
+                  color: '#3F3F46',
+                  fontSize: 16,
+                  marginTop: 3,
+                  fontFamily: 'Poppins_500Medium',
+                }}
               >
-                <Text
-                  numberOfLines={1}
-                  allowFontScaling={false}
-                  style={{
-                    color: '#3F3F46',
-                    fontSize: 16,
-                    marginTop: 3,
-                    fontFamily: 'Poppins_500Medium',
-                  }}
-                >
-                  {theme}
-                </Text>
-              </Pressable>
-            ))}
+                {theme}
+              </Text>
+            </Pressable>
+          ))}
         </View>
-        {data.length === sections.length && data.map(({ sets }, index) => (
-          <View style={{
-            marginBottom: index === sections.length - 1 ? 120 : 0,
-          }}
+        {data.length > 0 && data.map(({ sets }, index) => (
+          <View
+            key={sets[index].name}
+            style={{
+              marginBottom: index === 5 ? 120 : 0,
+            }}
           >
             <View style={{
               marginHorizontal: 26,
               flexDirection: 'row',
               justifyContent: 'space-between',
-              alignItems: 'center',
+              alignItems: 'flex-end',
             }}
             >
               <Text
@@ -246,16 +268,26 @@ function Home({ navigation }: StackScreenProps<{}>) {
                   fontFamily: 'Poppins_600SemiBold',
                   color: '#3F3F46',
                   fontSize: 26,
+                  paddingRight: 24,
+                  flex: 1,
+                  height: 46,
                 }}
+                numberOfLines={1}
                 allowFontScaling={false}
               >
-                {sections[index].name}
+                {sections[index]?.name}
               </Text>
-              <Pressable>
-                <Text style={{
-                  fontFamily: 'Poppins_600SemiBold',
-                  color: '#EF4444',
-                }}
+              <Pressable style={{
+                paddingBottom: 8,
+              }}
+              >
+                <Text
+                  allowFontScaling={false}
+                  style={{
+                    fontFamily: 'Poppins_600SemiBold',
+                    color: '#EF4444',
+                    fontSize: 18,
+                  }}
                 >
                   See more
                 </Text>
@@ -265,14 +297,17 @@ function Home({ navigation }: StackScreenProps<{}>) {
               height: 320,
             }}
             >
-              <ScrollView
+              <FlatList
                 horizontal
                 contentContainerStyle={{
                   paddingHorizontal: 20,
                 }}
-              >
-                {sets.map(({
-                  setID, number, name, image: { thumbnailURL },
+                data={sets}
+                keyExtractor={({ setID }) => setID.toString()}
+                renderItem={({
+                  item: {
+                    setID, number, name, image: { thumbnailURL },
+                  },
                 }) => (
                   <Pressable
                     onPress={() => navigation.navigate('SetDetails' as never, { setID } as never)}
@@ -294,17 +329,20 @@ function Home({ navigation }: StackScreenProps<{}>) {
                       }}
                       resizeMode="contain"
                     />
-                    <Text style={{
-                      color: '#EF4444',
-                      fontFamily: 'Poppins_600SemiBold',
-                      fontSize: 12,
-                      paddingTop: 20,
-                    }}
+                    <Text
+                      allowFontScaling={false}
+                      style={{
+                        color: '#EF4444',
+                        fontFamily: 'Poppins_600SemiBold',
+                        fontSize: 12,
+                        paddingTop: 20,
+                      }}
                     >
                       #
                       {number}
                     </Text>
                     <Text
+                      allowFontScaling={false}
                       numberOfLines={1}
                       style={{
                         fontFamily: 'Poppins_500Medium',
@@ -317,8 +355,8 @@ function Home({ navigation }: StackScreenProps<{}>) {
                       {name}
                     </Text>
                   </Pressable>
-                ))}
-              </ScrollView>
+                )}
+              />
             </View>
           </View>
         ))}
