@@ -3,15 +3,24 @@
 /* eslint-disable import/no-extraneous-dependencies */
 /* eslint-disable react/jsx-props-no-spreading */
 /* eslint-disable react/no-unstable-nested-components */
-import { Text, ScrollView } from 'react-native';
+import { Text, ScrollView, Pressable } from 'react-native';
 import React, { useEffect, useState } from 'react';
-import { List } from 'react-native-paper';
 import axios from 'axios';
 import { MotiView, View, AnimatePresence } from 'moti';
 import LottieView from 'lottie-react-native';
-import { Theme } from './types/themesData';
+import Ripple from 'react-native-material-ripple';
+import { createStackNavigator, StackScreenProps, TransitionPresets } from '@react-navigation/stack';
+import { Feather } from '@expo/vector-icons';
+import { SubTheme, Theme } from './types/themesData';
 
-function Themes() {
+type StackParamList = {
+  ThemesIndex: undefined;
+  SubThemes: {
+    theme: string;
+  }
+};
+
+function ThemesIndex({ navigation }: StackScreenProps<{}>) {
   const [themes, setThemes] = useState<Theme[]>([]);
 
   const fetchThemes = async () => {
@@ -20,7 +29,6 @@ function Themes() {
     });
     response.data.themes = (response.data.themes as Theme[])
       .filter(({ setCount }) => setCount >= 20);
-
     setThemes(response.data.themes);
   };
 
@@ -63,42 +71,43 @@ function Themes() {
               opacity: 1,
             }}
           >
-            <List.Accordion
-              theme={{
-                colors: {
-                  primary: '#EF4444',
-                  text: '#3F3F46',
-                },
-              }}
-              style={{
-                backgroundColor: 'white',
-              }}
-              titleStyle={{
-                fontFamily: 'Poppins_500Medium',
-                fontSize: 22,
-              }}
-              title={e.theme}
-            >
-              <List.Item
-                titleStyle={{
-                  fontFamily: 'Poppins_500Medium',
-                  fontSize: 20,
+            <Ripple onPress={() => navigation.navigate('SubThemes' as never, { theme: e.theme } as never)} rippleColor="#475569" rippleContainerBorderRadius={8}>
+              <View
+                style={{
+                  backgroundColor: 'white',
+                  paddingVertical: 16,
+                  borderBottomWidth: 1.6,
+                  borderColor: '#F8FAFC',
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
                 }}
-                right={() => (
-                  <Text style={{
+              >
+                <Text
+                  numberOfLines={1}
+                  style={{
                     fontFamily: 'Poppins_500Medium',
+                    fontSize: 20,
                     color: '#3F3F46',
-                    alignSelf: 'center',
-                    marginRight: 14,
-                    fontSize: 16,
+                    paddingTop: 4,
+                    paddingHorizontal: 16,
+                    flex: 1,
                   }}
-                  >
-                    {e.setCount}
-                  </Text>
-                )}
-                title="All"
-              />
-            </List.Accordion>
+                >
+                  {e.theme}
+                </Text>
+                <Text style={{
+                  fontFamily: 'Poppins_500Medium',
+                  fontSize: 16,
+                  color: '#3F3F46',
+                  paddingTop: 4,
+                  paddingHorizontal: 16,
+                }}
+                >
+                  {e.setCount}
+                </Text>
+              </View>
+            </Ripple>
           </MotiView>
         )) : (
           <View
@@ -133,6 +142,154 @@ function Themes() {
         )}
       </AnimatePresence>
     </ScrollView>
+  );
+}
+
+function SubThemes({ navigation, route: { params: { theme } } }: StackScreenProps<StackParamList, 'SubThemes'>) {
+  const [subThemes, setSubThemes] = useState<SubTheme[]>([]);
+
+  const getSubThemes = async (_theme: string) => {
+    const response = await axios({
+      url: `https://brickset.com/api/v3.asmx/getSubthemes?apiKey=3-xvT1-Lmgk-a1Lyw&theme=${_theme}`,
+    });
+    setSubThemes(response.data.subthemes);
+  };
+  useEffect(() => {
+    getSubThemes(theme);
+  }, []);
+  return (
+    <ScrollView
+      contentContainerStyle={{
+        paddingBottom: 140,
+      }}
+      style={{
+        backgroundColor: 'white',
+        flex: 1,
+        padding: 24,
+        paddingVertical: 22,
+      }}
+    >
+      <View style={{
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginBottom: 24,
+      }}
+      >
+        <Pressable onPress={() => navigation.goBack()}>
+          <Feather name="arrow-left" size={28} color="#3F3F46" />
+        </Pressable>
+        <Text
+          numberOfLines={1}
+          style={{
+            flex: 1,
+            fontSize: 24,
+            fontFamily: 'Poppins_600SemiBold',
+            paddingLeft: 16,
+            marginBottom: -6,
+            color: '#3F3F46',
+          }}
+        >
+          {theme}
+        </Text>
+      </View>
+      <AnimatePresence exitBeforeEnter>
+        {subThemes.length > 0 ? subThemes.map((e, i) => (
+          <MotiView
+            key={e.subtheme}
+            delay={i * 80}
+            from={{
+              opacity: 0,
+            }}
+            animate={{
+              opacity: 1,
+            }}
+          >
+            <Ripple onPress={() => console.log('fuck')} rippleColor="#475569" rippleContainerBorderRadius={8}>
+              <View
+                style={{
+                  backgroundColor: 'white',
+                  paddingVertical: 16,
+                  borderBottomWidth: 1.6,
+                  borderColor: '#F8FAFC',
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                }}
+              >
+                <Text
+                  numberOfLines={1}
+                  style={{
+                    fontFamily: 'Poppins_500Medium',
+                    fontSize: 20,
+                    color: '#3F3F46',
+                    paddingTop: 4,
+                    paddingHorizontal: 16,
+                    flex: 1,
+                  }}
+                >
+                  {e.subtheme !== '{None}' ? e.subtheme : 'Not Specified'}
+                </Text>
+                <Text style={{
+                  fontFamily: 'Poppins_500Medium',
+                  fontSize: 16,
+                  color: '#3F3F46',
+                  paddingTop: 4,
+                  paddingHorizontal: 16,
+                }}
+                >
+                  {e.setCount}
+                </Text>
+              </View>
+            </Ripple>
+          </MotiView>
+        )) : (
+          <View
+            key="loading"
+            from={{
+              opacity: 1,
+            }}
+            animate={{
+              opacity: 1,
+            }}
+            exit={{
+              opacity: 0,
+            }}
+            style={{
+              flex: 1,
+              height: 500,
+              alignSelf: 'center',
+              justifyContent: 'center',
+            }}
+          >
+            <LottieView
+              style={{
+                width: 260,
+                height: 260,
+                alignSelf: 'center',
+              }}
+              source={require('../assets/loading.json')}
+              autoPlay
+              loop
+            />
+          </View>
+        )}
+      </AnimatePresence>
+    </ScrollView>
+  );
+}
+
+const Stack = createStackNavigator<StackParamList>();
+
+function Themes() {
+  return (
+    <Stack.Navigator screenOptions={{
+      headerShown: false,
+      ...TransitionPresets.SlideFromRightIOS,
+    }}
+    >
+      <Stack.Screen name="ThemesIndex" component={ThemesIndex} />
+      <Stack.Screen name="SubThemes" component={SubThemes} />
+    </Stack.Navigator>
   );
 }
 

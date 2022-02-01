@@ -2,7 +2,14 @@
 /* eslint-disable import/no-extraneous-dependencies */
 /* eslint-disable import/extensions */
 import {
-  View, Text, Image, StatusBar, TextInput, Pressable, RefreshControl, FlatList,
+  View,
+  Text,
+  Image,
+  StatusBar,
+  TextInput,
+  Pressable,
+  RefreshControl,
+  FlatList,
 } from 'react-native';
 import React, { useCallback, useEffect, useState } from 'react';
 import axios from 'axios';
@@ -81,11 +88,11 @@ function Home({ homeNavigation, navigation }:IHome) {
   };
 
   useEffect(() => {
-    // fetchThemes();
+    fetchThemes();
   }, []);
 
   useEffect(() => {
-    // fetchData();
+    fetchData();
   }, [sections]);
 
   const onRefresh = useCallback(() => {
