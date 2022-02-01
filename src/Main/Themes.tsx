@@ -6,6 +6,7 @@ import { Text, ScrollView } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { List } from 'react-native-paper';
 import axios from 'axios';
+import { MotiView } from 'moti';
 import { Theme } from './types/themesData';
 
 function Themes() {
@@ -37,49 +38,71 @@ function Themes() {
         paddingVertical: 22,
       }}
     >
-      <Text style={{
-        fontFamily: 'Poppins_600SemiBold',
-        fontSize: 26,
-        color: '#3F3F46',
-        marginBottom: 12,
-      }}
+      <Text
+        allowFontScaling={false}
+        style={{
+          fontFamily: 'Poppins_600SemiBold',
+          fontSize: 30,
+          color: '#EF4444',
+          marginBottom: 12,
+        }}
       >
         Browse Themes
       </Text>
-      {themes.length > 0 && themes.map((e) => (
-        <List.Accordion
-          theme={{
-            colors: {
-              primary: '#EF4444',
-              text: '#3F3F46',
-            },
+      {themes.length > 0 && themes.map((e, i) => (
+        <MotiView
+          key={e.theme}
+          delay={i * 80}
+          from={{
+            opacity: 0,
+            transform: [
+              { translateY: 30 },
+            ],
           }}
-          style={{
-            backgroundColor: 'white',
+          animate={{
+            opacity: 1,
+            transform: [
+              { translateY: 0 },
+            ],
           }}
-          titleStyle={{
-            fontFamily: 'Poppins_500Medium',
-          }}
-          title={e.theme}
         >
-          <List.Item
+          <List.Accordion
+            theme={{
+              colors: {
+                primary: '#EF4444',
+                text: '#3F3F46',
+              },
+            }}
+            style={{
+              backgroundColor: 'white',
+            }}
             titleStyle={{
               fontFamily: 'Poppins_500Medium',
+              fontSize: 22,
             }}
-            right={() => (
-              <Text style={{
+            title={e.theme}
+          >
+            <List.Item
+              titleStyle={{
                 fontFamily: 'Poppins_500Medium',
-                color: '#3F3F46',
-                alignSelf: 'center',
-                marginRight: 14,
+                fontSize: 20
               }}
-              >
-                {e.setCount}
-              </Text>
-            )}
-            title="All"
-          />
-        </List.Accordion>
+              right={() => (
+                <Text style={{
+                  fontFamily: 'Poppins_500Medium',
+                  color: '#3F3F46',
+                  alignSelf: 'center',
+                  marginRight: 14,
+                  fontSize: 16
+                }}
+                >
+                  {e.setCount}
+                </Text>
+              )}
+              title="All"
+            />
+          </List.Accordion>
+        </MotiView>
       ))}
     </ScrollView>
   );

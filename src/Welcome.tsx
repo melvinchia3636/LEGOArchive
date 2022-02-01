@@ -1,12 +1,13 @@
 /* eslint-disable react/style-prop-object */
 /* eslint-disable import/no-extraneous-dependencies */
 import {
-  View, Text, ImageBackground, Pressable, Image, StatusBar,
+  View, Text, ImageBackground, Pressable, StatusBar,
 } from 'react-native';
 import React from 'react';
 import { Entypo } from '@expo/vector-icons';
 import { StackScreenProps } from '@react-navigation/stack';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { MotiImage, MotiText, MotiView } from 'moti';
 import welcomeBackground from './assets/welcome.png';
 import logo from './assets/logo.png';
 
@@ -19,7 +20,7 @@ function Welcome({ navigation }: StackScreenProps<{}>) {
     >
       <StatusBar translucent style="light" backgroundColor="transparent" />
       <ImageBackground
-        source={welcomeBackground}
+        source={welcomeBackground as never}
         style={{
           flex: 1,
           justifyContent: 'space-between',
@@ -28,8 +29,27 @@ function Welcome({ navigation }: StackScreenProps<{}>) {
         }}
         resizeMode="cover"
       >
-        <Image
-          source={logo}
+        <MotiImage
+          delay={200}
+          from={{
+            opacity: 0,
+            transform: [
+              { translateY: -100 },
+            ],
+          }}
+          animate={{
+            opacity: 1,
+            transform: [
+              { translateY: 0 },
+            ],
+          }}
+          transition={{
+            transform: {
+              type: 'timing',
+              duration: 800,
+            },
+          }}
+          source={logo as never}
           style={{
             width: 70,
           }}
@@ -40,8 +60,26 @@ function Welcome({ navigation }: StackScreenProps<{}>) {
           width: '100%',
         }}
         >
-          <Text
-            allowFontScaling={false}
+          <MotiText
+            delay={600}
+            from={{
+              opacity: 0,
+              transform: [
+                { translateY: 30 },
+              ],
+            }}
+            animate={{
+              opacity: 1,
+              transform: [
+                { translateY: 0 },
+              ],
+            }}
+            transition={{
+              transform: {
+                type: 'timing',
+                duration: 800,
+              },
+            }}
             style={{
               color: 'white',
               fontFamily: 'Poppins_700Bold',
@@ -51,9 +89,27 @@ function Welcome({ navigation }: StackScreenProps<{}>) {
             }}
           >
             18,000+ bricksets
-          </Text>
-          <Text
-            allowFontScaling={false}
+          </MotiText>
+          <MotiText
+            delay={1200}
+            from={{
+              opacity: 0,
+              transform: [
+                { translateY: 30 },
+              ],
+            }}
+            animate={{
+              opacity: 1,
+              transform: [
+                { translateY: 0 },
+              ],
+            }}
+            transition={{
+              transform: {
+                type: 'timing',
+                duration: 800,
+              },
+            }}
             style={{
               textAlign: 'center',
               color: '#F1F5F9',
@@ -65,46 +121,70 @@ function Welcome({ navigation }: StackScreenProps<{}>) {
           >
             Our database contains over 18,000 sets
             and other items released over the last 70 years.
-          </Text>
-          <Pressable
+          </MotiText>
+          <MotiView
             style={{
               width: '100%',
-              backgroundColor: '#EF4444',
-              padding: 16,
-              paddingTop: 18,
-              borderRadius: 14,
-              marginTop: 20,
-              elevation: 12,
-              flexDirection: 'row',
-              alignItems: 'center',
-              justifyContent: 'center',
             }}
-            onPress={() => navigation.reset({
-              index: 0,
-              routes: [{ name: 'Main' as never }],
-            })}
+            delay={1600}
+            from={{
+              opacity: 0,
+              transform: [
+                { translateY: 100 },
+              ],
+            }}
+            animate={{
+              opacity: 1,
+              transform: [
+                { translateY: 0 },
+              ],
+            }}
+            transition={{
+              transform: {
+                type: 'timing',
+                duration: 800,
+              },
+            }}
           >
-            <Text
-              allowFontScaling={false}
+            <Pressable
               style={{
-                color: 'white',
-                textAlign: 'center',
-                fontSize: 22,
-                fontFamily: 'Poppins_600SemiBold',
+                width: '100%',
+                backgroundColor: '#EF4444',
+                padding: 16,
+                paddingTop: 18,
+                borderRadius: 14,
+                marginTop: 20,
+                elevation: 12,
+                flexDirection: 'row',
+                alignItems: 'center',
+                justifyContent: 'center',
               }}
+              onPress={() => navigation.reset({
+                index: 0,
+                routes: [{ name: 'Main' as never }],
+              })}
             >
-              Explore now
-            </Text>
-            <Entypo
-              style={{
-                marginTop: -4,
-                marginLeft: 8,
-              }}
-              name="chevron-right"
-              size={24}
-              color="white"
-            />
-          </Pressable>
+              <Text
+                style={{
+                  color: 'white',
+                  textAlign: 'center',
+                  fontSize: 22,
+                  fontFamily: 'Poppins_600SemiBold',
+                }}
+              >
+                Explore now
+              </Text>
+              <Entypo
+                style={{
+                  marginTop: -4,
+                  marginLeft: 8,
+                }}
+                name="chevron-right"
+                size={24}
+                color="white"
+              />
+            </Pressable>
+          </MotiView>
         </View>
       </ImageBackground>
     </SafeAreaView>

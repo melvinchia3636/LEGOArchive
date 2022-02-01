@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 /* eslint-disable camelcase */
 /* eslint-disable import/extensions */
 /* eslint-disable import/no-extraneous-dependencies */
@@ -11,11 +12,24 @@ import * as SplashScreen from 'expo-splash-screen';
 import {
   useFonts, Poppins_700Bold, Poppins_600SemiBold, Poppins_500Medium, Poppins_400Regular,
 } from '@expo-google-fonts/poppins';
-import { View } from 'react-native';
+import { View, Text, TextInput } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import Welcome from './Welcome';
 import Main from './Main';
 import SetDetails from './SetDetails';
+
+interface TextWithDefaultProps extends Text {
+    defaultProps?: { allowFontScaling?: boolean };
+}
+
+interface TextInputWithDefaultProps extends TextInput {
+    defaultProps?: { allowFontScaling?: boolean };
+}
+
+((Text as unknown) as TextWithDefaultProps).defaultProps = ((Text as unknown) as TextWithDefaultProps).defaultProps || {};
+((Text as unknown) as TextWithDefaultProps).defaultProps!.allowFontScaling = false;
+((TextInput as unknown) as TextInputWithDefaultProps).defaultProps = ((TextInput as unknown) as TextInputWithDefaultProps).defaultProps || {};
+((TextInput as unknown) as TextInputWithDefaultProps).defaultProps!.allowFontScaling = false;
 
 export type RootStackParamList = {
   Main: undefined;
@@ -32,14 +46,14 @@ function App() {
     Poppins_700Bold,
     Poppins_600SemiBold,
     Poppins_500Medium,
-    Poppins_400Regular
+    Poppins_400Regular,
   });
 
   useEffect(() => {
     async function prepare() {
       try {
         await SplashScreen.preventAutoHideAsync();
-        await new Promise((resolve) => setTimeout(resolve, 2000));
+        await new Promise((resolve) => setTimeout(resolve, 1000));
       } catch (e) {
         console.warn(e);
       } finally {

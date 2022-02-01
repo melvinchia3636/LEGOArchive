@@ -10,6 +10,7 @@ import { ScrollView } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Feather } from '@expo/vector-icons';
 import { StackNavigationProp, StackScreenProps } from '@react-navigation/stack';
+import { MotiText, MotiView } from 'moti';
 import { SetData } from './types/setData';
 import { Theme } from './types/themesData';
 
@@ -101,25 +102,63 @@ function Home({ homeNavigation, navigation }:IHome) {
           marginBottom: 20,
         }}
         >
-          <View style={{
-            backgroundColor: '#FEE2E2',
-            alignItems: 'center',
-            justifyContent: 'center',
-            width: 56,
-            height: 56,
-            borderRadius: 100,
-          }}
+          <MotiView
+            delay={600}
+            from={{
+              opacity: 0,
+              transform: [
+                { translateX: -120 },
+              ],
+            }}
+            animate={{
+              opacity: 1,
+              transform: [
+                { translateX: 0 },
+              ],
+            }}
+            transition={{
+              transform: {
+                type: 'timing',
+                duration: 800,
+              },
+            }}
+            style={{
+              backgroundColor: '#FEE2E2',
+              alignItems: 'center',
+              justifyContent: 'center',
+              width: 56,
+              height: 56,
+              borderRadius: 100,
+            }}
           >
             <Feather name="user" size={32} color="#EF4444" />
-          </View>
+          </MotiView>
           <View style={{
             justifyContent: 'center',
             flex: 1,
             marginLeft: 12,
           }}
           >
-            <Text
-              allowFontScaling={false}
+            <MotiText
+              delay={600}
+              from={{
+                opacity: 0,
+                transform: [
+                  { translateY: -30 },
+                ],
+              }}
+              animate={{
+                opacity: 1,
+                transform: [
+                  { translateY: 0 },
+                ],
+              }}
+              transition={{
+                transform: {
+                  type: 'timing',
+                  duration: 500,
+                },
+              }}
               style={{
                 fontFamily: 'Poppins_600SemiBold',
                 fontSize: 16,
@@ -128,9 +167,27 @@ function Home({ homeNavigation, navigation }:IHome) {
               }}
             >
               Welcome Back,
-            </Text>
-            <Text
-              allowFontScaling={false}
+            </MotiText>
+            <MotiText
+              delay={600}
+              from={{
+                opacity: 0,
+                transform: [
+                  { translateY: 30 },
+                ],
+              }}
+              animate={{
+                opacity: 1,
+                transform: [
+                  { translateY: 0 },
+                ],
+              }}
+              transition={{
+                transform: {
+                  type: 'timing',
+                  duration: 500,
+                },
+              }}
               style={{
                 fontFamily: 'Poppins_600SemiBold',
                 fontSize: 24,
@@ -139,19 +196,39 @@ function Home({ homeNavigation, navigation }:IHome) {
               }}
             >
               Guest #4896
-            </Text>
+            </MotiText>
           </View>
         </View>
-        <View style={{
-          flexDirection: 'row',
-          alignItems: 'center',
-          marginHorizontal: 24,
-          padding: 6,
-          paddingHorizontal: 8,
-          backgroundColor: '#F1F5F9',
-          borderRadius: 12,
-          marginBottom: 20,
-        }}
+        <MotiView
+          delay={1000}
+          from={{
+            opacity: 0,
+            transform: [
+              { translateY: 30 },
+            ],
+          }}
+          animate={{
+            opacity: 1,
+            transform: [
+              { translateY: 0 },
+            ],
+          }}
+          transition={{
+            transform: {
+              type: 'timing',
+              duration: 500,
+            },
+          }}
+          style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+            marginHorizontal: 24,
+            padding: 6,
+            paddingHorizontal: 8,
+            backgroundColor: '#F1F5F9',
+            borderRadius: 12,
+            marginBottom: 20,
+          }}
         >
           <View style={{
             flexDirection: 'row',
@@ -162,7 +239,6 @@ function Home({ homeNavigation, navigation }:IHome) {
           >
             <Feather name="search" size={28} color="#94A3B8" />
             <TextInput
-              allowFontScaling={false}
               placeholder="Search bricksets"
               placeholderTextColor="#94A3B8"
               style={{
@@ -184,182 +260,7 @@ function Home({ homeNavigation, navigation }:IHome) {
           >
             <Feather name="sliders" size={26} color="white" />
           </Pressable>
-        </View>
-        <View style={{
-          marginHorizontal: 26,
-          flexDirection: 'row',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-        }}
-        >
-          <Text
-            style={{
-              fontFamily: 'Poppins_600SemiBold',
-              color: '#3F3F46',
-              fontSize: 26,
-            }}
-            allowFontScaling={false}
-          >
-            Themes
-          </Text>
-          <Pressable onPress={() => homeNavigation.navigate('themes' as never)}>
-            <Text
-              allowFontScaling={false}
-              style={{
-                fontFamily: 'Poppins_600SemiBold',
-                color: '#EF4444',
-                fontSize: 18,
-              }}
-            >
-              See all
-            </Text>
-          </Pressable>
-        </View>
-        <View style={{
-          paddingHorizontal: 24,
-          paddingBottom: 24,
-          flexDirection: 'row',
-          flexWrap: 'wrap',
-        }}
-        >
-          {randomThemes.length > 0 && randomThemes.map(({ theme }) => (
-            <Pressable style={{
-              padding: 4,
-              paddingHorizontal: 12,
-              borderRadius: 100,
-              borderWidth: 1.6,
-              borderColor: '#F1F5F9',
-              margin: 3,
-              flexGrow: 1,
-              alignItems: 'center',
-            }}
-            >
-              <Text
-                numberOfLines={1}
-                allowFontScaling={false}
-                style={{
-                  color: '#3F3F46',
-                  fontSize: 16,
-                  marginTop: 3,
-                  fontFamily: 'Poppins_500Medium',
-                }}
-              >
-                {theme}
-              </Text>
-            </Pressable>
-          ))}
-        </View>
-        {data.length > 0 && data.map(({ sets }, index) => (
-          <View
-            key={sets[index].name}
-            style={{
-              marginBottom: index === 5 ? 120 : 0,
-            }}
-          >
-            <View style={{
-              marginHorizontal: 26,
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              alignItems: 'flex-end',
-            }}
-            >
-              <Text
-                style={{
-                  fontFamily: 'Poppins_600SemiBold',
-                  color: '#3F3F46',
-                  fontSize: 26,
-                  paddingRight: 24,
-                  flex: 1,
-                  height: 46,
-                }}
-                numberOfLines={1}
-                allowFontScaling={false}
-              >
-                {sections[index]?.name}
-              </Text>
-              <Pressable style={{
-                paddingBottom: 8,
-              }}
-              >
-                <Text
-                  allowFontScaling={false}
-                  style={{
-                    fontFamily: 'Poppins_600SemiBold',
-                    color: '#EF4444',
-                    fontSize: 18,
-                  }}
-                >
-                  See more
-                </Text>
-              </Pressable>
-            </View>
-            <View style={{
-              height: 320,
-            }}
-            >
-              <FlatList
-                horizontal
-                contentContainerStyle={{
-                  paddingHorizontal: 20,
-                }}
-                data={sets}
-                keyExtractor={({ setID }) => setID.toString()}
-                renderItem={({
-                  item: {
-                    setID, number, name, image: { thumbnailURL },
-                  },
-                }) => (
-                  <Pressable
-                    onPress={() => navigation.navigate('SetDetails' as never, { setID } as never)}
-                    key={setID}
-                    style={{
-                      marginHorizontal: 6,
-                      borderWidth: 1.6,
-                      borderRadius: 8,
-                      borderColor: '#F1F5F9',
-                      padding: 18,
-                      height: 290,
-                    }}
-                  >
-                    <Image
-                      source={{ uri: thumbnailURL }}
-                      style={{
-                        width: 180,
-                        height: 180,
-                      }}
-                      resizeMode="contain"
-                    />
-                    <Text
-                      allowFontScaling={false}
-                      style={{
-                        color: '#EF4444',
-                        fontFamily: 'Poppins_600SemiBold',
-                        fontSize: 12,
-                        paddingTop: 20,
-                      }}
-                    >
-                      #
-                      {number}
-                    </Text>
-                    <Text
-                      allowFontScaling={false}
-                      numberOfLines={1}
-                      style={{
-                        fontFamily: 'Poppins_500Medium',
-                        fontSize: 22,
-                        marginTop: -8,
-                        width: 180,
-                        color: '#3F3F46',
-                      }}
-                    >
-                      {name}
-                    </Text>
-                  </Pressable>
-                )}
-              />
-            </View>
-          </View>
-        ))}
+        </MotiView>
       </ScrollView>
     </SafeAreaView>
   );
