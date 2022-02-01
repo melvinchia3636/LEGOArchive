@@ -40,7 +40,7 @@ This project is still under development, new features are being added constantly
 
 ## 💡 Inspirations 
 
-This project was inspired by ![Brickset](https://brickset.com) which is by far the largest Lego set database I could find online.
+This project was inspired by ![Brickset](https://brickset.com) which is by far the largest Lego set database I could find.
  
 ## 📄 License
 
