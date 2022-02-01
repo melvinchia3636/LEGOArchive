@@ -37,12 +37,11 @@ function SpecItem({ icon, name, value }: ISpecItem) {
       }}
       >
         <MaterialCommunityIcons
-          name={icon}
+          name={icon as never}
           size={24}
           color="#A1A1AA"
         />
         <Text
-          
           style={{
             fontSize: 18,
             fontFamily: 'Poppins_500Medium',
@@ -55,7 +54,6 @@ function SpecItem({ icon, name, value }: ISpecItem) {
         </Text>
       </View>
       <Text
-        
         style={{
           fontSize: 20,
           fontFamily: 'Poppins_500Medium',
@@ -113,7 +111,6 @@ function SetDetails({ navigation, route }: StackScreenProps<RootStackParamList, 
             <Feather name="arrow-left" size={28} color="#3F3F46" />
           </Pressable>
           <Text
-            
             style={{
               fontSize: 24,
               fontFamily: 'Poppins_600SemiBold',
@@ -140,7 +137,6 @@ function SetDetails({ navigation, route }: StackScreenProps<RootStackParamList, 
         }}
         >
           <Text
-            
             style={{
               color: '#EF4444',
               fontFamily: 'Poppins_600SemiBold',
@@ -150,7 +146,6 @@ function SetDetails({ navigation, route }: StackScreenProps<RootStackParamList, 
             {data?.theme}
           </Text>
           <Text
-            
             style={{
               color: '#3F3F46',
               fontFamily: 'Poppins_500Medium',
@@ -172,7 +167,6 @@ function SetDetails({ navigation, route }: StackScreenProps<RootStackParamList, 
             source={{ html: data?.extendedData.description || '' }}
           />
           <Text
-            
             style={{
               fontFamily: 'Poppins_500Medium',
               fontSize: 26,
@@ -202,7 +196,6 @@ function SetDetails({ navigation, route }: StackScreenProps<RootStackParamList, 
           {data.LEGOCom && (
           <>
             <Text
-              
               style={{
                 fontFamily: 'Poppins_500Medium',
                 fontSize: 26,
@@ -245,7 +238,6 @@ function SetDetails({ navigation, route }: StackScreenProps<RootStackParamList, 
                     />
                     <View>
                       <Text
-                        
                         style={{
                           fontFamily: 'Poppins_600SemiBold',
                           color: '#EF4444',
@@ -255,7 +247,6 @@ function SetDetails({ navigation, route }: StackScreenProps<RootStackParamList, 
                         {name}
                       </Text>
                       <Text
-                        
                         style={{
                           fontFamily: 'Poppins_500Medium',
                           fontSize: 18,
@@ -268,7 +259,6 @@ function SetDetails({ navigation, route }: StackScreenProps<RootStackParamList, 
                     </View>
                   </View>
                   <Text
-                    
                     style={{
                       fontFamily: 'Poppins_600SemiBold',
                       fontSize: 24,

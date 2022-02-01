@@ -34,7 +34,7 @@ function TabBar({ state, navigation }: BottomTabBarProps) {
       transition={{
         transform: {
           type: 'timing',
-          duration: 600,
+          duration: 400,
         },
       }}
       style={{
@@ -60,7 +60,7 @@ function TabBar({ state, navigation }: BottomTabBarProps) {
         >
           {index === 2 ? (
             <MotiView
-              delay={1000}
+              delay={800}
               from={{
                 opacity: 0,
                 transform: [

@@ -1,3 +1,4 @@
+/* eslint-disable global-require */
 /* eslint-disable import/extensions */
 /* eslint-disable import/no-extraneous-dependencies */
 /* eslint-disable react/jsx-props-no-spreading */
@@ -6,7 +7,8 @@ import { Text, ScrollView } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { List } from 'react-native-paper';
 import axios from 'axios';
-import { MotiView } from 'moti';
+import { MotiView, View, AnimatePresence } from 'moti';
+import LottieView from 'lottie-react-native';
 import { Theme } from './types/themesData';
 
 function Themes() {
@@ -49,61 +51,87 @@ function Themes() {
       >
         Browse Themes
       </Text>
-      {themes.length > 0 && themes.map((e, i) => (
-        <MotiView
-          key={e.theme}
-          delay={i * 80}
-          from={{
-            opacity: 0,
-            transform: [
-              { translateY: 30 },
-            ],
-          }}
-          animate={{
-            opacity: 1,
-            transform: [
-              { translateY: 0 },
-            ],
-          }}
-        >
-          <List.Accordion
-            theme={{
-              colors: {
-                primary: '#EF4444',
-                text: '#3F3F46',
-              },
+      <AnimatePresence exitBeforeEnter>
+        {themes.length > 0 ? themes.map((e, i) => (
+          <MotiView
+            key={e.theme}
+            delay={i * 80}
+            from={{
+              opacity: 0,
             }}
-            style={{
-              backgroundColor: 'white',
+            animate={{
+              opacity: 1,
             }}
-            titleStyle={{
-              fontFamily: 'Poppins_500Medium',
-              fontSize: 22,
-            }}
-            title={e.theme}
           >
-            <List.Item
+            <List.Accordion
+              theme={{
+                colors: {
+                  primary: '#EF4444',
+                  text: '#3F3F46',
+                },
+              }}
+              style={{
+                backgroundColor: 'white',
+              }}
               titleStyle={{
                 fontFamily: 'Poppins_500Medium',
-                fontSize: 20
+                fontSize: 22,
               }}
-              right={() => (
-                <Text style={{
+              title={e.theme}
+            >
+              <List.Item
+                titleStyle={{
                   fontFamily: 'Poppins_500Medium',
-                  color: '#3F3F46',
-                  alignSelf: 'center',
-                  marginRight: 14,
-                  fontSize: 16
+                  fontSize: 20,
                 }}
-                >
-                  {e.setCount}
-                </Text>
-              )}
-              title="All"
+                right={() => (
+                  <Text style={{
+                    fontFamily: 'Poppins_500Medium',
+                    color: '#3F3F46',
+                    alignSelf: 'center',
+                    marginRight: 14,
+                    fontSize: 16,
+                  }}
+                  >
+                    {e.setCount}
+                  </Text>
+                )}
+                title="All"
+              />
+            </List.Accordion>
+          </MotiView>
+        )) : (
+          <View
+            key="loading"
+            from={{
+              opacity: 1,
+            }}
+            animate={{
+              opacity: 1,
+            }}
+            exit={{
+              opacity: 0,
+            }}
+            style={{
+              flex: 1,
+              height: 500,
+              alignSelf: 'center',
+              justifyContent: 'center',
+            }}
+          >
+            <LottieView
+              style={{
+                width: 260,
+                height: 260,
+                alignSelf: 'center',
+              }}
+              source={require('../assets/loading.json')}
+              autoPlay
+              loop
             />
-          </List.Accordion>
-        </MotiView>
-      ))}
+          </View>
+        )}
+      </AnimatePresence>
     </ScrollView>
   );
 }

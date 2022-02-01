@@ -142,7 +142,7 @@ function Welcome({ navigation }: StackScreenProps<{}>) {
             transition={{
               transform: {
                 type: 'timing',
-                duration: 800,
+                duration: 500,
               },
             }}
           >
