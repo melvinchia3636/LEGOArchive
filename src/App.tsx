@@ -17,6 +17,7 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import Welcome from './Welcome';
 import Main from './Main';
 import SetDetails from './SetDetails';
+import SetList from './SetList';
 
 interface TextWithDefaultProps extends Text {
     defaultProps?: { allowFontScaling?: boolean };
@@ -35,6 +36,11 @@ export type RootStackParamList = {
   Main: undefined;
   Welcome: undefined;
   SetDetails: { setID: string }
+  SetList: {
+    theme: string;
+    subtheme: string;
+    query?: string
+  }
 };
 
 const RootStack = createStackNavigator<RootStackParamList>();
@@ -94,6 +100,7 @@ function App() {
             <RootStack.Screen name="Welcome" component={Welcome} />
             <RootStack.Screen name="Main" component={Main} />
             <RootStack.Screen name="SetDetails" component={SetDetails} />
+            <RootStack.Screen name="SetList" component={SetList} />
           </RootStack.Navigator>
         </NavigationContainer>
       </View>

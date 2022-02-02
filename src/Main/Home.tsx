@@ -45,12 +45,13 @@ function Home({ homeNavigation, navigation }:IHome) {
   const [sections, setSections] = useState([
     {
       name: 'Latest Sets',
-      params: '{year: 2020,pageSize:16}',
+      params: '{year: 2022,pageSize:16}',
     },
   ]);
   const [randomThemes, setRandomThemes] = useState<Theme[]>([]);
   const [data, setData] = useState<SetData[]>([]);
   const [refreshing, setRefreshing] = useState(false);
+  const [query, setQuery] = useState('');
 
   const fetchThemes = async () => {
     const response = await axios({
@@ -66,7 +67,7 @@ function Home({ homeNavigation, navigation }:IHome) {
 
     setSections([{
       name: 'Latest Sets',
-      params: '{year: 2020,pageSize:16}',
+      params: '{year: 2022,pageSize:16}',
     }].concat(rThemes.map(({ theme }) => ({
       name: theme,
       params: `{theme:"${theme.toLowerCase()}",pageSize:16,orderBy:"YearFromDESC"}`,
@@ -88,7 +89,7 @@ function Home({ homeNavigation, navigation }:IHome) {
   };
 
   useEffect(() => {
-    fetchThemes();
+    setTimeout(() => fetchThemes(), 1600);
   }, []);
 
   useEffect(() => {
@@ -186,26 +187,37 @@ function Home({ homeNavigation, navigation }:IHome) {
           >
             <Feather name="search" size={28} color="#94A3B8" />
             <TextInput
+              value={query}
+              onChangeText={setQuery}
               placeholder="Search bricksets"
               placeholderTextColor="#94A3B8"
+              selectionColor="#EF4444"
               style={{
                 fontFamily: 'Poppins_500Medium',
+                color: '#3F3F46',
                 marginLeft: 12,
                 flex: 1,
                 fontSize: 20,
-                lineHeight: 20,
-                marginTop: 2,
+                lineHeight: 26,
+                marginBottom: -4,
+                paddingRight: 16,
                 height: 55,
               }}
             />
           </View>
-          <Pressable style={{
-            backgroundColor: '#EF4444',
-            padding: 12,
-            borderRadius: 8,
-          }}
+          <Pressable
+            onPress={() => {
+              if (query) {
+                homeNavigation.navigate('SetList' as never, { query } as never);
+              }
+            }}
+            style={{
+              backgroundColor: '#EF4444',
+              padding: 12,
+              borderRadius: 8,
+            }}
           >
-            <Feather name="sliders" size={26} color="white" />
+            <Feather name="arrow-right" size={26} color="white" />
           </Pressable>
         </View>
         <View style={{
@@ -266,6 +278,7 @@ function Home({ homeNavigation, navigation }:IHome) {
           ))}
           {data.length > 1 && randomThemes.map(({ theme }) => (
             <Pressable
+              onPress={() => homeNavigation.navigate('SetList' as never, { theme } as never)}
               key={theme}
               style={{
                 padding: 4,
@@ -374,9 +387,11 @@ function Home({ homeNavigation, navigation }:IHome) {
               >
                 {sections[index]?.name}
               </Text>
-              <Pressable style={{
-                paddingBottom: 8,
-              }}
+              <Pressable
+                onPress={() => homeNavigation.navigate('SetList' as never, { theme: sections[index]?.name } as never)}
+                style={{
+                  paddingBottom: 8,
+                }}
               >
                 <Text
                   allowFontScaling={false}

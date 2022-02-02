@@ -1,3 +1,4 @@
+/* eslint-disable no-shadow */
 /* eslint-disable global-require */
 /* eslint-disable import/extensions */
 /* eslint-disable import/no-extraneous-dependencies */
@@ -9,8 +10,11 @@ import axios from 'axios';
 import { MotiView, View, AnimatePresence } from 'moti';
 import LottieView from 'lottie-react-native';
 import Ripple from 'react-native-material-ripple';
-import { createStackNavigator, StackScreenProps, TransitionPresets } from '@react-navigation/stack';
+import {
+  createStackNavigator, StackNavigationProp, StackScreenProps, TransitionPresets,
+} from '@react-navigation/stack';
 import { Feather } from '@expo/vector-icons';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { SubTheme, Theme } from './types/themesData';
 
 type StackParamList = {
@@ -19,6 +23,10 @@ type StackParamList = {
     theme: string;
   }
 };
+
+interface ISubThemes extends StackScreenProps<StackParamList, 'SubThemes'>{
+  homeNavigation: StackNavigationProp<{}>
+}
 
 function ThemesIndex({ navigation }: StackScreenProps<{}>) {
   const [themes, setThemes] = useState<Theme[]>([]);
@@ -37,115 +45,121 @@ function ThemesIndex({ navigation }: StackScreenProps<{}>) {
   }, []);
 
   return (
-    <ScrollView
-      contentContainerStyle={{
-        paddingBottom: 140,
-      }}
-      style={{
-        backgroundColor: 'white',
-        flex: 1,
-        padding: 24,
-        paddingVertical: 22,
-      }}
+    <SafeAreaView style={{
+      flex: 1,
+    }}
     >
-      <Text
-        allowFontScaling={false}
+      <ScrollView
+        contentContainerStyle={{
+          paddingBottom: 140,
+        }}
         style={{
-          fontFamily: 'Poppins_600SemiBold',
-          fontSize: 30,
-          color: '#EF4444',
-          marginBottom: 12,
+          backgroundColor: 'white',
+          flex: 1,
+          padding: 24,
+          paddingVertical: 22,
         }}
       >
-        Browse Themes
-      </Text>
-      <AnimatePresence exitBeforeEnter>
-        {themes.length > 0 ? themes.map((e, i) => (
-          <MotiView
-            key={e.theme}
-            delay={i * 80}
-            from={{
-              opacity: 0,
-            }}
-            animate={{
-              opacity: 1,
-            }}
-          >
-            <Ripple onPress={() => navigation.navigate('SubThemes' as never, { theme: e.theme } as never)} rippleColor="#475569" rippleContainerBorderRadius={8}>
-              <View
-                style={{
-                  backgroundColor: 'white',
-                  paddingVertical: 16,
-                  borderBottomWidth: 1.6,
-                  borderColor: '#F8FAFC',
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                }}
-              >
-                <Text
-                  numberOfLines={1}
+        <Text
+          allowFontScaling={false}
+          style={{
+            fontFamily: 'Poppins_600SemiBold',
+            fontSize: 30,
+            color: '#EF4444',
+            marginBottom: 12,
+          }}
+        >
+          Browse Themes
+        </Text>
+        <AnimatePresence exitBeforeEnter>
+          {themes.length > 0 ? themes.map((e, i) => (
+            <MotiView
+              key={e.theme}
+              delay={i * 80}
+              from={{
+                opacity: 0,
+              }}
+              animate={{
+                opacity: 1,
+              }}
+            >
+              <Ripple onPress={() => navigation.navigate('SubThemes' as never, { theme: e.theme } as never)} rippleColor="#475569" rippleContainerBorderRadius={8}>
+                <View
                   style={{
+                    backgroundColor: 'white',
+                    paddingVertical: 16,
+                    borderBottomWidth: 1.6,
+                    borderColor: '#F8FAFC',
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                  }}
+                >
+                  <Text
+                    numberOfLines={1}
+                    style={{
+                      fontFamily: 'Poppins_500Medium',
+                      fontSize: 20,
+                      color: '#3F3F46',
+                      paddingTop: 4,
+                      paddingHorizontal: 16,
+                      flex: 1,
+                    }}
+                  >
+                    {e.theme}
+                  </Text>
+                  <Text style={{
                     fontFamily: 'Poppins_500Medium',
-                    fontSize: 20,
+                    fontSize: 16,
                     color: '#3F3F46',
                     paddingTop: 4,
                     paddingHorizontal: 16,
-                    flex: 1,
                   }}
-                >
-                  {e.theme}
-                </Text>
-                <Text style={{
-                  fontFamily: 'Poppins_500Medium',
-                  fontSize: 16,
-                  color: '#3F3F46',
-                  paddingTop: 4,
-                  paddingHorizontal: 16,
-                }}
-                >
-                  {e.setCount}
-                </Text>
-              </View>
-            </Ripple>
-          </MotiView>
-        )) : (
-          <View
-            key="loading"
-            from={{
-              opacity: 1,
-            }}
-            animate={{
-              opacity: 1,
-            }}
-            exit={{
-              opacity: 0,
-            }}
-            style={{
-              flex: 1,
-              height: 500,
-              alignSelf: 'center',
-              justifyContent: 'center',
-            }}
-          >
-            <LottieView
-              style={{
-                width: 260,
-                height: 260,
-                alignSelf: 'center',
+                  >
+                    {e.setCount}
+                  </Text>
+                </View>
+              </Ripple>
+            </MotiView>
+          )) : (
+            <View
+              key="loading"
+              from={{
+                opacity: 1,
               }}
-              source={require('../assets/loading.json')}
-              autoPlay
-              loop
-            />
-          </View>
-        )}
-      </AnimatePresence>
-    </ScrollView>
+              animate={{
+                opacity: 1,
+              }}
+              exit={{
+                opacity: 0,
+              }}
+              style={{
+                flex: 1,
+                height: 500,
+                alignSelf: 'center',
+                justifyContent: 'center',
+              }}
+            >
+              <LottieView
+                style={{
+                  width: 260,
+                  height: 260,
+                  alignSelf: 'center',
+                }}
+                source={require('../assets/loading.json')}
+                autoPlay
+                loop
+              />
+            </View>
+          )}
+        </AnimatePresence>
+      </ScrollView>
+
+    </SafeAreaView>
   );
 }
 
-function SubThemes({ navigation, route: { params: { theme } } }: StackScreenProps<StackParamList, 'SubThemes'>) {
+function SubThemes({ navigation, route: { params: { theme } }, homeNavigation }: ISubThemes) {
   const [subThemes, setSubThemes] = useState<SubTheme[]>([]);
 
   const getSubThemes = async (_theme: string) => {
@@ -158,129 +172,134 @@ function SubThemes({ navigation, route: { params: { theme } } }: StackScreenProp
     getSubThemes(theme);
   }, []);
   return (
-    <ScrollView
-      contentContainerStyle={{
-        paddingBottom: 140,
-      }}
-      style={{
-        backgroundColor: 'white',
-        flex: 1,
-        padding: 24,
-        paddingVertical: 22,
-      }}
+    <SafeAreaView style={{
+      flex: 1,
+    }}
     >
-      <View style={{
-        flexDirection: 'row',
-        alignItems: 'center',
-        marginBottom: 24,
-      }}
+      <ScrollView
+        contentContainerStyle={{
+          paddingBottom: 140,
+        }}
+        style={{
+          backgroundColor: 'white',
+          flex: 1,
+          padding: 24,
+          paddingVertical: 22,
+        }}
       >
-        <Pressable onPress={() => navigation.goBack()}>
-          <Feather name="arrow-left" size={28} color="#3F3F46" />
-        </Pressable>
-        <Text
-          numberOfLines={1}
-          style={{
-            flex: 1,
-            fontSize: 24,
-            fontFamily: 'Poppins_600SemiBold',
-            paddingLeft: 16,
-            marginBottom: -6,
-            color: '#3F3F46',
-          }}
+        <View style={{
+          flexDirection: 'row',
+          alignItems: 'center',
+          marginBottom: 24,
+        }}
         >
-          {theme}
-        </Text>
-      </View>
-      <AnimatePresence exitBeforeEnter>
-        {subThemes.length > 0 ? subThemes.map((e, i) => (
-          <MotiView
-            key={e.subtheme}
-            delay={i * 80}
-            from={{
-              opacity: 0,
-            }}
-            animate={{
-              opacity: 1,
+          <Pressable onPress={() => navigation.goBack()}>
+            <Feather name="arrow-left" size={28} color="#3F3F46" />
+          </Pressable>
+          <Text
+            numberOfLines={1}
+            style={{
+              flex: 1,
+              fontSize: 24,
+              fontFamily: 'Poppins_600SemiBold',
+              paddingLeft: 16,
+              marginBottom: -6,
+              color: '#3F3F46',
             }}
           >
-            <Ripple onPress={() => console.log('fuck')} rippleColor="#475569" rippleContainerBorderRadius={8}>
-              <View
-                style={{
-                  backgroundColor: 'white',
-                  paddingVertical: 16,
-                  borderBottomWidth: 1.6,
-                  borderColor: '#F8FAFC',
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                }}
+            {theme}
+          </Text>
+        </View>
+        <AnimatePresence exitBeforeEnter>
+          {subThemes.length > 0 ? subThemes.map((e, i) => (
+            <MotiView
+              key={e.subtheme}
+              delay={i * 80}
+              from={{
+                opacity: 0,
+              }}
+              animate={{
+                opacity: 1,
+              }}
+            >
+              <Ripple
+                onPress={() => homeNavigation.navigate('SetList' as never, {
+                  theme: e.theme,
+                  subtheme: e.subtheme,
+                } as never)}
+                rippleColor="#475569"
+                rippleContainerBorderRadius={8}
               >
-                <Text
-                  numberOfLines={1}
+                <View
                   style={{
+                    backgroundColor: 'white',
+                    paddingVertical: 16,
+                    borderBottomWidth: 1.6,
+                    borderColor: '#F8FAFC',
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                  }}
+                >
+                  <Text
+                    numberOfLines={1}
+                    style={{
+                      fontFamily: 'Poppins_500Medium',
+                      fontSize: 20,
+                      color: '#3F3F46',
+                      paddingTop: 4,
+                      paddingHorizontal: 16,
+                      flex: 1,
+                    }}
+                  >
+                    {e.subtheme !== '{None}' ? e.subtheme : 'Not Specified'}
+                  </Text>
+                  <Text style={{
                     fontFamily: 'Poppins_500Medium',
-                    fontSize: 20,
+                    fontSize: 16,
                     color: '#3F3F46',
                     paddingTop: 4,
                     paddingHorizontal: 16,
-                    flex: 1,
                   }}
-                >
-                  {e.subtheme !== '{None}' ? e.subtheme : 'Not Specified'}
-                </Text>
-                <Text style={{
-                  fontFamily: 'Poppins_500Medium',
-                  fontSize: 16,
-                  color: '#3F3F46',
-                  paddingTop: 4,
-                  paddingHorizontal: 16,
-                }}
-                >
-                  {e.setCount}
-                </Text>
-              </View>
-            </Ripple>
-          </MotiView>
-        )) : (
-          <View
-            key="loading"
-            from={{
-              opacity: 1,
-            }}
-            animate={{
-              opacity: 1,
-            }}
-            exit={{
-              opacity: 0,
-            }}
-            style={{
-              flex: 1,
-              height: 500,
-              alignSelf: 'center',
-              justifyContent: 'center',
-            }}
-          >
-            <LottieView
+                  >
+                    {e.setCount}
+                  </Text>
+                </View>
+              </Ripple>
+            </MotiView>
+          )) : (
+            <View
+              key="loading"
               style={{
-                width: 260,
-                height: 260,
+                flex: 1,
+                height: 500,
                 alignSelf: 'center',
+                justifyContent: 'center',
               }}
-              source={require('../assets/loading.json')}
-              autoPlay
-              loop
-            />
-          </View>
-        )}
-      </AnimatePresence>
-    </ScrollView>
+            >
+              <LottieView
+                style={{
+                  width: 260,
+                  height: 260,
+                  alignSelf: 'center',
+                }}
+                source={require('../assets/loading.json')}
+                autoPlay
+                loop
+              />
+            </View>
+          )}
+        </AnimatePresence>
+      </ScrollView>
+
+    </SafeAreaView>
   );
 }
 
 const Stack = createStackNavigator<StackParamList>();
 
-function Themes() {
+function Themes({ navigation }: StackScreenProps<{}>) {
+  const homeNavigation = navigation;
   return (
     <Stack.Navigator screenOptions={{
       headerShown: false,
@@ -288,7 +307,15 @@ function Themes() {
     }}
     >
       <Stack.Screen name="ThemesIndex" component={ThemesIndex} />
-      <Stack.Screen name="SubThemes" component={SubThemes} />
+      <Stack.Screen name="SubThemes">
+        {({ route, navigation }) => (
+          <SubThemes
+            route={route}
+            navigation={navigation}
+            homeNavigation={homeNavigation}
+          />
+        )}
+      </Stack.Screen>
     </Stack.Navigator>
   );
 }

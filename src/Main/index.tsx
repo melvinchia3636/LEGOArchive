@@ -33,7 +33,14 @@ function Main({ navigation }: StackScreenProps<{}>) {
           />
         )}
       </Tab.Screen>
-      <Tab.Screen name="themes" component={Themes} />
+      <Tab.Screen name="themes">
+        {({ route }) => (
+          <Themes
+            navigation={rootNavigation}
+            route={route as never}
+          />
+        )}
+      </Tab.Screen>
       <Tab.Screen name="search" component={Search} />
       <Tab.Screen name="account" component={Account} />
       <Tab.Screen name="settings" component={Settings} />

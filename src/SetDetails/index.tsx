@@ -11,6 +11,7 @@ import { Feather, MaterialCommunityIcons } from '@expo/vector-icons';
 import RenderHTML from 'react-native-render-html';
 import CountryFlag from 'react-native-country-flag';
 import Moment from 'moment';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { RootStackParamList } from '../App';
 import { CA, SetDetailsData } from './types/setDetailsType';
 
@@ -88,7 +89,11 @@ function SetDetails({ navigation, route }: StackScreenProps<RootStackParamList, 
   }, []);
 
   return (
-    <>
+    <SafeAreaView style={{
+      flex: 1,
+      backgroundColor: 'white',
+    }}
+    >
       {data
       && (
       <ScrollView
@@ -160,7 +165,7 @@ function SetDetails({ navigation, route }: StackScreenProps<RootStackParamList, 
             tagsStyles={{
               body: {
                 fontFamily: 'Poppins_400Regular',
-                fontSize: 16,
+                fontSize: 14,
               },
             }}
             systemFonts={['Poppins_400Regular']}
@@ -277,7 +282,7 @@ function SetDetails({ navigation, route }: StackScreenProps<RootStackParamList, 
         </View>
       </ScrollView>
       )}
-    </>
+    </SafeAreaView>
   );
 }
 
