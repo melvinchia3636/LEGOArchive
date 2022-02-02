@@ -23,7 +23,6 @@ function SetList({ navigation, route: { params: { theme, subtheme, query } } }: 
         url: `https://brickset.com/api/v3.asmx/getSets?apiKey=3-xvT1-Lmgk-a1Lyw&params={${theme ? `theme:"${theme}"` : ''}${subtheme ? `,subtheme:"${subtheme}"` : ''}${query ? `${theme ? ',' : ''}query:"${query}"` : ''},orderBy:'YearFromDESC',pageSize:20,pageNumber:${nextPage}}&userHash=`,
         method: 'GET',
       });
-      console.log(response.data);
       setItems(items.concat(response.data.sets || []));
       if (response.data.sets.length === 20) {
         setNextPage(nextPage + 1);

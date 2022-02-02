@@ -14,6 +14,7 @@ import {
 } from '@expo-google-fonts/poppins';
 import { View, Text, TextInput } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import Welcome from './Welcome';
 import Main from './Main';
 import SetDetails from './SetDetails';
@@ -47,6 +48,7 @@ const RootStack = createStackNavigator<RootStackParamList>();
 
 function App() {
   const [appIsReady, setAppIsReady] = useState<boolean>(false);
+  const [firstTime, setFirstTime] = useState(true);
 
   const [fontsLoaded] = useFonts({
     Poppins_700Bold,
@@ -59,7 +61,8 @@ function App() {
     async function prepare() {
       try {
         await SplashScreen.preventAutoHideAsync();
-        await new Promise((resolve) => setTimeout(resolve, 1000));
+        const isFirstTime = await AsyncStorage.getItem('isFirstTime') || 'true';
+        setFirstTime(isFirstTime === 'true');
       } catch (e) {
         console.warn(e);
       } finally {
@@ -90,7 +93,7 @@ function App() {
       >
         <NavigationContainer>
           <RootStack.Navigator
-            initialRouteName="Welcome"
+            initialRouteName={firstTime ? 'Welcome' : 'Main'}
             screenOptions={{
               headerShown: false,
               gestureEnabled: false,

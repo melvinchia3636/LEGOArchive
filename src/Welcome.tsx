@@ -1,3 +1,4 @@
+/* eslint-disable import/extensions */
 /* eslint-disable react/style-prop-object */
 /* eslint-disable import/no-extraneous-dependencies */
 import {
@@ -8,17 +9,19 @@ import { Entypo } from '@expo/vector-icons';
 import { StackScreenProps } from '@react-navigation/stack';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { MotiImage, MotiText, MotiView } from 'moti';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import welcomeBackground from './assets/welcome.png';
 import logo from './assets/logo.png';
+import { RootStackParamList } from './App';
 
-function Welcome({ navigation }: StackScreenProps<{}>) {
+function Welcome({ navigation }: StackScreenProps<RootStackParamList, 'Welcome'>) {
   return (
     <SafeAreaView style={{
       flex: 1,
       backgroundColor: 'black',
     }}
     >
-      <StatusBar translucent style="light" backgroundColor="transparent" />
+      <StatusBar translucent bar-style="light-content" backgroundColor="transparent" />
       <ImageBackground
         source={welcomeBackground as never}
         style={{
@@ -159,10 +162,13 @@ function Welcome({ navigation }: StackScreenProps<{}>) {
                 alignItems: 'center',
                 justifyContent: 'center',
               }}
-              onPress={() => navigation.reset({
-                index: 0,
-                routes: [{ name: 'Main' as never }],
-              })}
+              onPress={() => {
+                AsyncStorage.setItem('isFirstTime', 'false');
+                navigation.reset({
+                  index: 0,
+                  routes: [{ name: 'Main' as never }],
+                });
+              }}
             >
               <Text
                 style={{
