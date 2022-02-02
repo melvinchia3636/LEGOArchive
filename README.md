@@ -4,13 +4,13 @@
 
 ## The Problem
 
-- The UI/UX of Brickset.com looks undoubtedly disgusting (It hurts my eyes a lot)
+- The UI/UX of Brickset.com isn't eye-catching enough
 - I need a project for practicing my React Native skills
 - I want to give React Reanimated 2 a try
 
 ## The Solution
 
-I've made a mobile app version of Lego sets database using Brickset.com API and don't worry, the app has a nice UI that won't hurt users' eyes. With the React Reanimated 2 (using Moti), I was able to create smooth animation for each and every screen transition. The app makes use of every feature on Brickset.com API v3, including authentication that allows users to interact Brickset databsae inside the app.
+I've made a mobile app version of Lego sets database using Brickset.com API that has a nice UI. With the React Reanimated 2 (using Moti), I was able to create smooth animation for each and every screen transition. The app makes use of every feature on Brickset.com API v3, including authentication that allows users to interact Brickset databsae inside the app.
 
 ## 🖥 Screenshots
 
