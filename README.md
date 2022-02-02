@@ -10,7 +10,7 @@
 
 ## The Solution
 
-I've made a mobile app version of Lego sets database using Brickset.com API that has a nice UI. With the React Reanimated 2 (using Moti), I was able to create smooth animation for each and every screen transition. The app makes use of every feature on Brickset.com API v3, including authentication that allows users to interact Brickset databsae inside the app.
+I've made a mobile app version of Lego sets database that has a nice UI using Brickset.com API. With the React Reanimated 2 (using Moti), I was able to create smooth animation for each and every screen transition. The app makes use of every feature on Brickset.com API v3, including authentication that allows users to interact Brickset databsae inside the app.
 
 ## 🖥 Screenshots
 
