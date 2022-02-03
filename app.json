@@ -3,7 +3,6 @@
     "name": "LEGOArchive",
     "slug": "LEGOArchive",
     "version": "1.0.0",
-    "entryPoint": "./src/App.tsx",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
@@ -11,20 +10,23 @@
       "resizeMode": "contain",
       "backgroundColor": "#EF4444"
     },
-    "updates": {
-      "fallbackToCacheTimeout": 0
-    },
     "assetBundlePatterns": [
       "**/*"
     ],
+    "plugins": [
+      "@config-plugins/react-native-blob-util",
+      "@config-plugins/react-native-pdf"
+    ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.melvinchia.LEGOArchive"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
-      }
+      },
+      "package": "com.melvinchia.LEGOArchive"
     },
     "web": {
       "favicon": "./assets/favicon.png"

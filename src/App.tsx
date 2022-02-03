@@ -4,11 +4,9 @@
 /* eslint-disable import/no-extraneous-dependencies */
 /* eslint-disable no-promise-executor-return */
 import 'react-native-gesture-handler';
-import { registerRootComponent } from 'expo';
 import React, { useCallback, useEffect, useState } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator, TransitionPresets } from '@react-navigation/stack';
-import * as SplashScreen from 'expo-splash-screen';
 import {
   useFonts, Poppins_700Bold, Poppins_600SemiBold, Poppins_500Medium, Poppins_400Regular,
 } from '@expo-google-fonts/poppins';
@@ -47,9 +45,7 @@ export type RootStackParamList = {
 const RootStack = createStackNavigator<RootStackParamList>();
 
 function App() {
-  const [appIsReady, setAppIsReady] = useState<boolean>(false);
   const [firstTime, setFirstTime] = useState(true);
-
   const [fontsLoaded] = useFonts({
     Poppins_700Bold,
     Poppins_600SemiBold,
@@ -59,34 +55,20 @@ function App() {
 
   useEffect(() => {
     async function prepare() {
-      try {
-        await SplashScreen.preventAutoHideAsync();
-        const isFirstTime = await AsyncStorage.getItem('isFirstTime') || 'true';
-        setFirstTime(isFirstTime === 'true');
-      } catch (e) {
-        console.warn(e);
-      } finally {
-        setAppIsReady(true);
-      }
+      const isFirstTime = await AsyncStorage.getItem('isFirstTime') || 'true';
+      setFirstTime(isFirstTime === 'true');
     }
 
     prepare();
   }, []);
 
-  const onLayoutRootView = useCallback(async () => {
-    if (appIsReady && fontsLoaded) {
-      await SplashScreen.hideAsync();
-    }
-  }, [appIsReady]);
-
-  if (!appIsReady || !fontsLoaded) {
-    return null;
+  if (!fontsLoaded) {
+    return <Text>fuck</Text>;
   }
 
   return (
     <SafeAreaProvider>
       <View
-        onLayout={onLayoutRootView}
         style={{
           flex: 1,
         }}
@@ -111,4 +93,4 @@ function App() {
   );
 }
 
-export default registerRootComponent(App);
+export default App;

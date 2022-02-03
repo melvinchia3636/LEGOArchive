@@ -20,7 +20,7 @@ function SetList({ navigation, route: { params: { theme, subtheme, query } } }: 
   const fetchData = async () => {
     if (nextPage) {
       const response = await axios({
-        url: `https://brickset.com/api/v3.asmx/getSets?apiKey=3-xvT1-Lmgk-a1Lyw&params={${theme ? `theme:"${theme}"` : ''}${subtheme ? `,subtheme:"${subtheme}"` : ''}${query ? `${theme ? ',' : ''}query:"${query}"` : ''},orderBy:'YearFromDESC',pageSize:20,pageNumber:${nextPage}}&userHash=`,
+        url: `https://brickset.com/api/v3.asmx/getSets?apiKey=3-xvT1-Lmgk-a1Lyw&params={${theme !== 'Latest Sets' ? `${theme ? `theme:"${theme}"` : ''}${subtheme ? `,subtheme:"${subtheme}"` : ''}${query ? `${theme ? ',' : ''}query:"${query}"` : ''}` : `year:${new Date().getFullYear()}`},orderBy:'YearFromDESC',pageSize:20,pageNumber:${nextPage}}&userHash=`,
         method: 'GET',
       });
       setItems(items.concat(response.data.sets || []));
