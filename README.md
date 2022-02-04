@@ -31,8 +31,8 @@ Coming Soon.
 
 If you want to run the website on your local machine:
 1. Clone the repository: `git clone https://github.com/melvinchia3636/LEGOArchive`
-2. Install all the required dependencies using `expo install`
-4. Run `expo start` and you're good to go.
+2. Install all the required dependencies using `yarn install && expo install`
+4. Run `expo run:android` or `yarn android` and you're good to go.
 
 ## 📈 Status
 
