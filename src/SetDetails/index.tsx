@@ -203,8 +203,6 @@ function SetDetailsIndex({
         }}
         >
           <ImageSlider
-            loopBothSides
-            autoPlayWithInterval={3000}
             images={[
               data.image.imageURL,
               ...additionalImages.slice(0, 15),

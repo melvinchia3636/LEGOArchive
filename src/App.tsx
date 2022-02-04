@@ -4,7 +4,7 @@
 /* eslint-disable import/no-extraneous-dependencies */
 /* eslint-disable no-promise-executor-return */
 import 'react-native-gesture-handler';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator, TransitionPresets } from '@react-navigation/stack';
 import {
