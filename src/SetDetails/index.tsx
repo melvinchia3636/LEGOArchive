@@ -101,7 +101,7 @@ function SpecItem({ icon, name, value }: ISpecItem) {
 }
 
 function SetDetailsIndex({
-  homeNavigation, homeRoute, navigation, route,
+  homeNavigation, homeRoute, navigation,
 }: ISetDetails) {
   const [data, setData] = useState<SetDetailsData | undefined>();
   const [additionalImages, setAdditionalImages] = useState<string[]>([]);
@@ -483,7 +483,8 @@ function ViewInstructionsPDF({ route, navigation }: StackScreenProps<SetDetailsP
         <View style={{
           flexDirection: 'row',
           alignItems: 'center',
-          padding: 24,
+          paddingHorizontal: 24,
+          paddingVertical: 18,
         }}
         >
           <Pressable onPress={() => navigation.goBack()}>
@@ -504,20 +505,8 @@ function ViewInstructionsPDF({ route, navigation }: StackScreenProps<SetDetailsP
         </View>
         <Pdf
           source={{ uri: route.params.url }}
-          onLoadComplete={(numberOfPages, filePath) => {
-            console.log(`Number of pages: ${numberOfPages}`);
-          }}
-          onPageChanged={(page, numberOfPages) => {
-            console.log(`Current page: ${page}`);
-          }}
-          onError={(error) => {
-            console.log(error);
-          }}
-          onPressLink={(uri) => {
-            console.log(`Link pressed: ${uri}`);
-          }}
           style={{
-            flex: 1
+            flex: 1,
           }}
         />
       </View>
